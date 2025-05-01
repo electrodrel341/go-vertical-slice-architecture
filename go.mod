@@ -1,4 +1,4 @@
-module github.com/sebajax/go-vertical-slice-architecture
+module PetAi
 
 go 1.21.6
 
@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/golang-migrate/migrate/v4 v4.17.0
 	github.com/jackc/pgx/v5 v5.5.3
+	github.com/joho/godotenv v1.5.1
 	github.com/sebajax/go-architecture-angrycoders v0.0.0-20240215234534-8b0c71a519da
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/dig v1.17.1

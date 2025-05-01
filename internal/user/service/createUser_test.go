@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user/mock"
+	"PetAi/internal/user"
+	"PetAi/internal/user/mock"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/database"
+	"PetAi/internal/user"
+	"PetAi/pkg/database"
 )
 
 // User repository for querying the database

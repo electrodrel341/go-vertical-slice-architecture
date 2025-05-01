@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"PetAi/internal/user/service"
 	"github.com/gofiber/fiber/v2"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user/service"
 )
 
 // UserRouter is the Router for GoFiber App

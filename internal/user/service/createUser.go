@@ -3,8 +3,8 @@ package service
 import (
 	"log"
 
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/apperror"
+	"PetAi/internal/user"
+	"PetAi/pkg/apperror"
 )
 
 // User use cases (port injection)

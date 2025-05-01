@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/sebajax/go-vertical-slice-architecture/internal/product/infrastructure"
+	"PetAi/internal/product/infrastructure"
 	"go.uber.org/dig"
 )
 

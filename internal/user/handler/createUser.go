@@ -3,13 +3,13 @@ package handler
 import (
 	"time"
 
+	"PetAi/internal/user"
+	"PetAi/internal/user/service"
+	"PetAi/pkg/apperror"
+	"PetAi/pkg/message"
+	"PetAi/pkg/validate"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/user/service"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/apperror"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/message"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/validate"
 )
 
 // Body request schema for CreateUser

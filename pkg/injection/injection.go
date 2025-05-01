@@ -3,9 +3,9 @@ package injection
 import (
 	"os"
 
-	productservice "github.com/sebajax/go-vertical-slice-architecture/internal/product/service"
-	userservice "github.com/sebajax/go-vertical-slice-architecture/internal/user/service"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/database"
+	productservice "PetAi/internal/product/service"
+	userservice "PetAi/internal/user/service"
+	"PetAi/pkg/database"
 	"go.uber.org/dig"
 )
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/sebajax/go-vertical-slice-architecture/internal/product"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/product/mock"
+	"PetAi/internal/product"
+	"PetAi/internal/product/mock"
 	"github.com/stretchr/testify/assert"
 )
 

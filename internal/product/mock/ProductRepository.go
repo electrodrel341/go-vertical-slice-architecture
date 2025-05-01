@@ -3,7 +3,7 @@
 package mock
 
 import (
-	product "github.com/sebajax/go-vertical-slice-architecture/internal/product"
+	product "PetAi/internal/product"
 	mock "github.com/stretchr/testify/mock"
 )
 

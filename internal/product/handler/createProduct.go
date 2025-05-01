@@ -1,13 +1,13 @@
 package handler
 
 import (
+	"PetAi/internal/product"
+	"PetAi/internal/product/service"
+	"PetAi/pkg/apperror"
+	"PetAi/pkg/message"
+	"PetAi/pkg/validate"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/product"
-	"github.com/sebajax/go-vertical-slice-architecture/internal/product/service"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/apperror"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/message"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/validate"
 )
 
 // Body request schema for CreateProduct

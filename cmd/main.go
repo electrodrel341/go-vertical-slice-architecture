@@ -5,16 +5,23 @@ import (
 	"log"
 	"os"
 
+	producthandler "PetAi/internal/product/handler"
+	userhandler "PetAi/internal/user/handler"
+	"PetAi/pkg/injection"
+	"PetAi/pkg/middleware"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
-	producthandler "github.com/sebajax/go-vertical-slice-architecture/internal/product/handler"
-	userhandler "github.com/sebajax/go-vertical-slice-architecture/internal/user/handler"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/injection"
-	"github.com/sebajax/go-vertical-slice-architecture/pkg/middleware"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load()
+	if err != nil {
+		panic("Ошибка загрузки .env файла")
+	}
+
 	// prepare all components for dependency injection
 	injection.ProvideComponents()
 
