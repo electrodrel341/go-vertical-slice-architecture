@@ -44,3 +44,7 @@ func InternalServerError() *AppError {
 func EntityNotFound(message string) *AppError {
 	return NewAppError(http.StatusUnprocessableEntity, message)
 }
+
+func ConfigNotFound(message string) *AppError {
+	return NewAppError(http.StatusInternalServerError, message)
+}

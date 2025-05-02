@@ -96,8 +96,8 @@ type Promt struct {
 	RequestMessage         string
 	Model                  AIModel
 	Max_tokens             *int
-	Temperature            *float64
-	TopP                   *float64
+	Temperature            *float32
+	TopP                   *float32
 	SystemMessage          string
 	MessagesHistory        []string
 	ProviderSpecificParams map[string]interface{}
