@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	llmhandler "PetAi/internal/llmrequest/handler"
 	producthandler "PetAi/internal/product/handler"
 	userhandler "PetAi/internal/user/handler"
 	"PetAi/pkg/injection"
@@ -55,6 +56,10 @@ func main() {
 	// add api group for product
 	productApi := api.Group("/product") // /api/product
 	producthandler.ProductRouter(productApi, injection.ProductServiceProvider)
+
+	// add api group for product
+	llmApi := api.Group("/llm") // /api/product
+	llmhandler.LLMRouter(llmApi, injection.LLMServiceProvider)
 
 	// listen in port 8080
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", os.Getenv("API_PORT"))))

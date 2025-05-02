@@ -1,12 +1,12 @@
 package injection
 
 import (
-	"os"
-
+	llmservice "PetAi/internal/llmrequest/service"
 	productservice "PetAi/internal/product/service"
 	userservice "PetAi/internal/user/service"
 	"PetAi/pkg/database"
 	"go.uber.org/dig"
+	"os"
 )
 
 // container instance
@@ -17,6 +17,8 @@ var UserServiceProvider *userservice.UserService
 
 // new product service instace
 var ProductServiceProvider *productservice.ProductService
+
+var LLMServiceProvider *llmservice.LLMService
 
 // provide components for injection
 func ProvideComponents() {
@@ -51,6 +53,8 @@ func ProvideComponents() {
 
 	// product provider injection
 	productservice.ProvideProductComponents(container)
+
+	llmservice.ProvideLLMComponents(container)
 }
 
 // init service container
@@ -65,6 +69,13 @@ func InitComponents() error {
 	// product service init componets injection
 	ProductServiceProvider = productservice.NewProductService()
 	err = ProductServiceProvider.InitProductComponents(container)
+	if err != nil {
+		panic(err)
+	}
+
+	// LLM service init componets injection
+	LLMServiceProvider = llmservice.NewLLMService()
+	err = LLMServiceProvider.InitLLMComponents(container)
 	if err != nil {
 		panic(err)
 	}

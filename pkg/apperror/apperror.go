@@ -40,3 +40,7 @@ func Forbidden(message string) *AppError {
 func InternalServerError() *AppError {
 	return NewAppError(http.StatusInternalServerError, "INTERNAL_SERVER_ERROR")
 }
+
+func EntityNotFound(message string) *AppError {
+	return NewAppError(http.StatusUnprocessableEntity, message)
+}
