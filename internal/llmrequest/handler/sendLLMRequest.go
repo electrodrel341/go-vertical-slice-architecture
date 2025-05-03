@@ -4,7 +4,7 @@ import (
 	"PetAi/internal/llmrequest"
 	"PetAi/internal/llmrequest/service"
 	"PetAi/pkg/apperror"
-	"PetAi/pkg/message"
+	"PetAi/pkg/messages"
 	"PetAi/pkg/validate"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -36,13 +36,19 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		}
 
 		aiApiProvider, err := llmrequest.ParseAIApiProvider(body.AIProvider)
+		if err != nil {
+			// if service response an error return via the middleware
+			log.Error(err)
+			return err
+		}
 
 		// No schema errores then map body to domain
 		p := &llmrequest.LLMRequest{
 			AIApiProvider: aiApiProvider,
 			Promt: llmrequest.Promt{
 				RequestMessage: body.Message,
-				Model:          llmrequest.AIModel(llmrequest.O1),
+				SystemMessage:  "You are a helpful assistant that creates blog outlines.",
+				Model:          llmrequest.O4mini,
 			},
 		}
 
@@ -55,6 +61,6 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		}
 
 		// Success execution
-		return c.Status(fiber.StatusOK).JSON(message.SuccessResponse(&result))
+		return c.Status(fiber.StatusOK).JSON(messages.SuccessResponse(&result))
 	}
 }

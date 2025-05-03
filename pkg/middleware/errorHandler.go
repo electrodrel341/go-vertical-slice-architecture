@@ -2,10 +2,9 @@ package middleware
 
 import (
 	"PetAi/pkg/apperror"
-	"PetAi/pkg/message"
+	"PetAi/pkg/messages"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
-	"github.com/sebajax/go-architecture-angrycoders/pkg/messages"
 )
 
 // ErrorHandler is a middleware that converts AppError to fiber.Error.
@@ -17,13 +16,13 @@ func ErrorHandler(c *fiber.Ctx) error {
 	if err != nil {
 		// Log the error, handle it, or send a custom response
 		if e, ok := err.(*apperror.AppError); ok {
-			log.Error(message.ErrorResponse(e))
-			return c.Status(e.Code).JSON(messages.ErrorResponse(e))
+			log.Error(messages.ErrorResponse(e))
+			return c.Status(e.Code).JSON(messages.ErrorResponseAppError(e))
 		}
 
 		// An internal server error ocurred trying to cast error to apperror
-		log.Error(message.ErrorResponse(err))
-		return c.Status(fiber.StatusInternalServerError).JSON(message.ErrorResponse(err))
+		log.Error(messages.ErrorResponse(err))
+		return c.Status(fiber.StatusInternalServerError).JSON(messages.ErrorResponse(err))
 	}
 
 	// If no error, continue the chain

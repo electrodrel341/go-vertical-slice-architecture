@@ -4,9 +4,9 @@ import (
 	llmservice "PetAi/internal/llmrequest/service"
 	productservice "PetAi/internal/product/service"
 	userservice "PetAi/internal/user/service"
+	"PetAi/pkg/config"
 	"PetAi/pkg/database"
 	"go.uber.org/dig"
-	"os"
 )
 
 // container instance
@@ -26,15 +26,17 @@ func ProvideComponents() {
 	container = dig.New()
 
 	// generate db config instance
+	dbConfig := config.Get().DBConfig
+
 	err := container.Provide(func() *database.DbConfig {
 		config := database.NewDbConfig(
-			os.Getenv("DB_USER"),
-			os.Getenv("DB_PASSWORD"),
-			os.Getenv("DB_NAME"),
-			os.Getenv("DB_HOST"),
-			os.Getenv("DB_PORT"),
+			dbConfig.User,
+			dbConfig.Password,
+			dbConfig.Name,
+			dbConfig.Host,
+			dbConfig.Port,
 		)
-		config.WithMigration(os.Getenv("MIGRATIONS_PATH"))
+		config.WithMigration(dbConfig.MigrationsPath)
 
 		return config
 	})

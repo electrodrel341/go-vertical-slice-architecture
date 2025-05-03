@@ -56,12 +56,6 @@ func ParseProductCategory(s string) ProductCategory {
 	}
 }
 
-// Const for error messages
-const (
-	ErrorSkuExists     string = "ERROR_SKU_EXISTS"
-	ErrorWrongCategory string = "ERROR_WRONG_CATEGORY"
-)
-
 // Product Domain
 type Product struct {
 	Id        int64

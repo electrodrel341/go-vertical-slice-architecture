@@ -2,11 +2,6 @@ package user
 
 import "time"
 
-// Const for error messages
-const (
-	ErrorEmailExists string = "ERROR_EMAIL_EXISTS"
-)
-
 // User Domain
 type User struct {
 	Id             int64

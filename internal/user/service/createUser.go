@@ -22,7 +22,7 @@ func NewCreateUserService(repository user.UserRepository) *CreateUserService {
 
 // Create a new user and store the user into the database
 func (service *CreateUserService) CreateUser(u *user.User) (int64, error) {
-	_, check, err := service.userRepository.GetByEmail(u.Email)
+	_, _, err := service.userRepository.GetByEmail(u.Email)
 	// check if user does not exist and no database error ocurred
 	if err != nil {
 		// database error
@@ -30,12 +30,12 @@ func (service *CreateUserService) CreateUser(u *user.User) (int64, error) {
 		err := apperror.InternalServerError()
 		return 0, err
 	}
-	if check {
+	/*	if check {
 		// user found
 		log.Println(u, user.ErrorEmailExists)
 		err := apperror.BadRequest(user.ErrorEmailExists)
 		return 0, err
-	}
+	}*/
 
 	// create the new user and return the id
 	id, err := service.userRepository.Save(u)

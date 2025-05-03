@@ -22,7 +22,7 @@ func NewCreateProductService(repository product.ProductRepository) *CreateProduc
 
 // Create a new product and store the product into the database
 func (service *CreateProductService) CreateProduct(p *product.Product) (int64, error) {
-	_, check, err := service.productRepository.GetBySku(p.Sku)
+	_, _, err := service.productRepository.GetBySku(p.Sku)
 	// check if product sky does not exist and no database error ocurred
 	if err != nil {
 		// database error
@@ -30,12 +30,12 @@ func (service *CreateProductService) CreateProduct(p *product.Product) (int64, e
 		err := apperror.InternalServerError()
 		return 0, err
 	}
-	if check {
+	/*	if check {
 		// product sku found
 		log.Println(p, product.ErrorSkuExists)
 		err := apperror.BadRequest(product.ErrorSkuExists)
 		return 0, err
-	}
+	}*/
 
 	// create the new product and return the id
 	id, err := service.productRepository.Save(p)

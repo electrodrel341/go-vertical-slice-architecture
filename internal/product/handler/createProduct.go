@@ -4,7 +4,7 @@ import (
 	"PetAi/internal/product"
 	"PetAi/internal/product/service"
 	"PetAi/pkg/apperror"
-	"PetAi/pkg/message"
+	"PetAi/pkg/messages"
 	"PetAi/pkg/validate"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
@@ -55,6 +55,6 @@ func CreateProduct(s *service.CreateProductService) fiber.Handler {
 		}
 
 		// Success execution
-		return c.Status(fiber.StatusCreated).JSON(message.SuccessResponse(&result))
+		return c.Status(fiber.StatusCreated).JSON(messages.SuccessResponse(&result))
 	}
 }

@@ -1,19 +1,18 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"os"
-
 	llmhandler "PetAi/internal/llmrequest/handler"
 	producthandler "PetAi/internal/product/handler"
 	userhandler "PetAi/internal/user/handler"
+	"PetAi/pkg/config"
 	"PetAi/pkg/injection"
 	"PetAi/pkg/middleware"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	"github.com/joho/godotenv"
+	"log"
 )
 
 func main() {
@@ -21,6 +20,11 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		panic("Ошибка загрузки .env файла")
+	}
+
+	err = config.LoadConfig()
+	if err != nil {
+		panic(err)
 	}
 
 	// prepare all components for dependency injection
@@ -61,6 +65,5 @@ func main() {
 	llmApi := api.Group("/llm") // /api/product
 	llmhandler.LLMRouter(llmApi, injection.LLMServiceProvider)
 
-	// listen in port 8080
-	log.Fatal(app.Listen(fmt.Sprintf(":%s", os.Getenv("API_PORT"))))
+	log.Fatal(app.Listen(fmt.Sprintf(":%s", config.Get().APPConfig.Port)))
 }

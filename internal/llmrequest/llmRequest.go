@@ -21,6 +21,7 @@ const (
 	O1 AIModel = iota
 	O3
 	O4
+	O4mini
 	Claude37sonnet
 	Googledefaultmodel
 	Yandexdefaultmodel
@@ -50,11 +51,23 @@ func ParseAIApiProvider(s string) (AIApiProvider, error) {
 		return GoogleCloud, nil
 	default:
 		{
-			err := apperror.EntityNotFound(ErrorWrongAIApiProvider)
+			err := apperror.EntityNotFound(apperror.ErrorWrongAIApiProvider)
 			return UndefinedProvider, err
 		}
 
 	}
+}
+
+func (p AIModel) String() string {
+	return [...]string{
+		"o1",
+		"o3",
+		"o4",
+		"gpt-4o-mini",
+		"yandex",
+		"claude-3.7-sonnet",
+		"google-cloud",
+	}[p]
 }
 
 func ParseAIModel(s string) (AIModel, error) {
@@ -65,6 +78,8 @@ func ParseAIModel(s string) (AIModel, error) {
 		return O3, nil
 	case "o4":
 		return O4, nil
+	case "gpt-4o-mini":
+		return O4mini, nil
 	case "yandex":
 		return Yandexdefaultmodel, nil
 	case "claude-3.7-sonnet":
@@ -73,18 +88,12 @@ func ParseAIModel(s string) (AIModel, error) {
 		return Googledefaultmodel, nil
 	default:
 		{
-			err := apperror.EntityNotFound(ErrorWrongAIModel)
+			err := apperror.EntityNotFound(apperror.ErrorWrongAIModel)
 			return UndefinedModel, err
 		}
 
 	}
 }
-
-// Const for error messages
-const (
-	ErrorWrongAIApiProvider string = "ERROR_WRONG_AI_PROVIDER"
-	ErrorWrongAIModel       string = "ERROR_WRONG_AI_MODEL"
-)
 
 type LLMRequest struct {
 	AIApiProvider AIApiProvider

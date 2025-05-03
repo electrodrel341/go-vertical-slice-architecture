@@ -2,49 +2,56 @@ package apperror
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"net/http"
 )
 
 type AppError struct {
-	Code    int
-	Message string
+	Code                    int
+	Message                 string
+	InternalCode            int
+	InternalCodeDescription string
+	Id                      uuid.NullUUID
 }
 
 func (r *AppError) Error() string {
 	return fmt.Sprintf(r.Message)
 }
 
-func NewAppError(code int, message string) *AppError {
+func NewAppError(HTTPCode int, errorData ErrorData) *AppError {
 	return &AppError{
-		Code:    code,
-		Message: message,
+		Code:                    HTTPCode,
+		Message:                 errorData.Message,
+		InternalCode:            errorData.CodeValue,
+		InternalCodeDescription: errorData.CodeDescription,
+		Id:                      uuid.NullUUID{UUID: uuid.New()},
 	}
 }
 
-func NotFound(message string) *AppError {
-	return NewAppError(http.StatusNotFound, message)
+//func NotFound(Message string) *AppError {
+//	return NewAppError(http.StatusNotFound, Message)
+//}
+
+func BadRequest(errorData ErrorData) *AppError {
+	return NewAppError(http.StatusBadRequest, errorData)
 }
 
-func BadRequest(message string) *AppError {
-	return NewAppError(http.StatusBadRequest, message)
-}
+//func Unauthorized(Message string) *AppError {
+//	return NewAppError(http.StatusUnauthorized, Message)
+//}
 
-func Unauthorized(message string) *AppError {
-	return NewAppError(http.StatusUnauthorized, message)
-}
-
-func Forbidden(message string) *AppError {
-	return NewAppError(http.StatusForbidden, message)
-}
+//func Forbidden(Message string) *AppError {
+//	return NewAppError(http.StatusForbidden, Message)
+//}
 
 func InternalServerError() *AppError {
-	return NewAppError(http.StatusInternalServerError, "INTERNAL_SERVER_ERROR")
+	return NewAppError(http.StatusInternalServerError, ErrorInternalServerError)
 }
 
-func EntityNotFound(message string) *AppError {
-	return NewAppError(http.StatusUnprocessableEntity, message)
+func EntityNotFound(errorData ErrorData) *AppError {
+	return NewAppError(http.StatusUnprocessableEntity, errorData)
 }
 
-func ConfigNotFound(message string) *AppError {
-	return NewAppError(http.StatusInternalServerError, message)
+func ConfigNotFound(errorData ErrorData) *AppError {
+	return NewAppError(http.StatusInternalServerError, errorData)
 }

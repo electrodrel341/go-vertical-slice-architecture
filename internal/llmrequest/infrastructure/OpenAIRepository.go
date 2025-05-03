@@ -3,17 +3,16 @@ package infrastructure
 import (
 	"PetAi/internal/llmrequest"
 	"PetAi/pkg/apperror"
+	appConfig "PetAi/pkg/config"
 	"PetAi/pkg/database"
 	"context"
 	"fmt"
-	"log"
-	"os"
-
 	openai "github.com/sashabaranov/go-openai"
-)
-
-const (
-	ErrorNotFoundOpenAiApiKey string = "ERROR_NOT_FOUND_OPENAI_API_KEY"
+	"log"
+	"net"
+	"net/http"
+	"net/url"
+	"time"
 )
 
 type OpenAIRepository struct {
@@ -26,20 +25,42 @@ type OpenAIRepository struct {
 // Create a LLM request instance repository
 func NewOpenAIRepository(dbcon *database.DbConn) (llmrequest.LLMRepository, error) {
 
-	apiKey := os.Getenv("OPENAI_API_KEY")
+	apiKey := appConfig.Get().LLMConfig.OpenAIAPIKey
+
 	if apiKey == "" {
-		err := apperror.ConfigNotFound(ErrorNotFoundOpenAiApiKey)
+		err := apperror.ConfigNotFound(apperror.ErrorNotFoundOpenAiApiKey)
 		log.Println("Ошибка инициализации OpenAI:", err)
 		return nil, err
 	}
 
+	config := openai.DefaultConfig(apiKey)
+
+	proxyURL, _ := url.Parse(appConfig.Get().ProxyConfig.Url)
+
+	// Создаем Transport с прокси
+	transport := &http.Transport{
+		Proxy: http.ProxyURL(proxyURL),
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}).DialContext,
+	}
+
+	// Создаем клиент с кастомным Transport
+	httpClient := &http.Client{
+		Transport: transport,
+		Timeout:   60 * time.Second,
+	}
+
+	config.HTTPClient = httpClient
+	client := openai.NewClientWithConfig(config)
+
 	return &OpenAIRepository{
 		db:     dbcon,
 		apiKey: apiKey,
-		client: openai.NewClient(apiKey),
+		client: client,
 	}, nil
 
-	//return &OpenAIRepository{db: dbcon}
 }
 
 // Send a new request in the LLM
@@ -76,7 +97,7 @@ func (repo *OpenAIRepository) SendRequest(p *llmrequest.Promt) (string, error) {
 
 	// Формируем параметры запроса
 	req := openai.ChatCompletionRequest{
-		Model:    string(p.Model),
+		Model:    p.Model.String(),
 		Messages: messages,
 	}
 
