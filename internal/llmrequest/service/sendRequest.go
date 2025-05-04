@@ -3,11 +3,12 @@ package service
 import (
 	"PetAi/internal/llmrequest"
 	"PetAi/pkg/apperror"
-	"log"
+	"github.com/rs/zerolog"
 )
 
 type SendLLMRequestService struct {
 	router llmrequest.LLMRepositoryRouter
+	logger zerolog.Logger
 }
 
 // Create a new llm request service use case instance
@@ -18,24 +19,27 @@ type SendLLMRequestService struct {
 	}
 }*/
 
-func NewSendLLMRequestService(router llmrequest.LLMRepositoryRouter) *SendLLMRequestService {
+func NewSendLLMRequestService(
+	router llmrequest.LLMRepositoryRouter,
+	logger zerolog.Logger, // добавили логгер
+) *SendLLMRequestService {
 	return &SendLLMRequestService{
 		router: router,
+		logger: logger,
 	}
 }
 
 // Create a new product and store the product into the database
 func (service *SendLLMRequestService) SendRequest(p *llmrequest.LLMRequest) (string, error) {
-	repo, err := service.router.GetRepository(p.AIApiProvider)
 
+	repo, err := service.router.GetRepository(p.AIApiProvider)
 	response, err := repo.SendRequest(&p.Promt)
 
 	if err != nil {
-		log.Println(err)
+		service.logger.Error().Str("provider", string(p.AIApiProvider)).Msg("Error sending LLM request")
 		err := apperror.InternalServerError(err)
 		return "", err
 	}
 
-	// product created successfuly
 	return response, nil
 }
