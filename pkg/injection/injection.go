@@ -6,6 +6,8 @@ import (
 	userservice "PetAi/internal/user/service"
 	"PetAi/pkg/config"
 	"PetAi/pkg/database"
+	"PetAi/pkg/logger"
+	"github.com/rs/zerolog"
 	"go.uber.org/dig"
 )
 
@@ -25,10 +27,20 @@ func ProvideComponents() {
 	// create a new container
 	container = dig.New()
 
+	err := container.Provide(logger.InitLogger)
+	if err != nil {
+		panic(err)
+	}
+
+	err = container.Provide(provideFiberApp)
+	if err != nil {
+		panic(err)
+	}
+
 	// generate db config instance
 	dbConfig := config.Get().DBConfig
 
-	err := container.Provide(func() *database.DbConfig {
+	err = container.Provide(func() *database.DbConfig {
 		config := database.NewDbConfig(
 			dbConfig.User,
 			dbConfig.Password,
@@ -45,7 +57,9 @@ func ProvideComponents() {
 	}
 
 	// provide the database connection injection
-	err = container.Provide(database.InitPool)
+	err = container.Provide(func(cfg *database.DbConfig, logger zerolog.Logger) *database.DbConn {
+		return database.InitPool(cfg, logger)
+	})
 	if err != nil {
 		panic(err)
 	}

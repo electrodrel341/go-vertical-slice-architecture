@@ -30,7 +30,9 @@ type ProxyConfig struct {
 }
 
 type AppConfig struct {
-	Port string
+	Name     string
+	Port     string
+	LogLevel string
 }
 
 type LLMConfig struct {
@@ -66,7 +68,9 @@ func LoadConfig() error {
 				Url: os.Getenv("PROXY_URL"),
 			},
 			APPConfig: AppConfig{
-				Port: os.Getenv("API_PORT"),
+				Name:     os.Getenv("PROJECT_NAME"),
+				Port:     os.Getenv("API_PORT"),
+				LogLevel: os.Getenv("LOG_LEVEL"),
 			},
 		}
 	})

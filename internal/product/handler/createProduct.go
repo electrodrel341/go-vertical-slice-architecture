@@ -32,10 +32,10 @@ func CreateProduct(s *service.CreateProductService) fiber.Handler {
 		}
 
 		// Validate schema
-		serr, err := validate.Validate(body)
+		appErr, err := validate.Validate(body)
 		if err != nil {
-			log.Error(serr)
-			return apperror.BadRequest(serr)
+			log.Error(appErr)
+			return apperror.BadRequest(appErr, err)
 		}
 
 		// No schema errores then map body to domain

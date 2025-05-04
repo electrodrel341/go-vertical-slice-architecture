@@ -27,7 +27,7 @@ func (service *CreateProductService) CreateProduct(p *product.Product) (int64, e
 	if err != nil {
 		// database error
 		log.Println(err)
-		err := apperror.InternalServerError()
+		err := apperror.InternalServerError(err)
 		return 0, err
 	}
 	/*	if check {
@@ -42,7 +42,7 @@ func (service *CreateProductService) CreateProduct(p *product.Product) (int64, e
 	if err != nil {
 		// database error
 		log.Println(err)
-		err := apperror.InternalServerError()
+		err := apperror.InternalServerError(err)
 		return 0, err
 	}
 

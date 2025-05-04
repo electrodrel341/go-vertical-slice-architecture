@@ -32,7 +32,7 @@ func (service *SendLLMRequestService) SendRequest(p *llmrequest.LLMRequest) (str
 
 	if err != nil {
 		log.Println(err)
-		err := apperror.InternalServerError()
+		err := apperror.InternalServerError(err)
 		return "", err
 	}
 

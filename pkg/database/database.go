@@ -3,12 +3,12 @@ package database
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"github.com/rs/zerolog"
 )
 
 type DbConn struct {
@@ -16,49 +16,34 @@ type DbConn struct {
 }
 
 // InitPool initializes the database connection pool and runs migrations.
-func InitPool(config *DbConfig) *DbConn {
-	var db *sql.DB
-
+func InitPool(config *DbConfig, logger zerolog.Logger) *DbConn {
 	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		config.dbHost, config.dbPort, config.dbUser, config.dbPassword, config.dbName)
 
-	// Initialize the connection pool
 	db, err := sql.Open("pgx", connectionString)
 	if err != nil {
-		log.Panicf("error opening database: %v", err)
+		logger.Panic().Err(err).Msg("failed to open database connection")
 	}
 
-	// Verify the connection
 	if err := db.Ping(); err != nil {
-		log.Panicf("error pinging database: %v", err)
+		logger.Panic().Err(err).Msg("failed to ping database")
 	}
 
-	// Run migrations if needed only if migration path is set
 	if config.dbMigrationPath != nil {
-		if err := runMigration(db, *config.dbMigrationPath); err != nil {
-			log.Panicf("error pinging database: %v", err)
+		if err := runMigration(db, *config.dbMigrationPath, logger); err != nil {
+			logger.Panic().Err(err).Msg("failed to run database migration")
 		}
 	}
 
-	// Return the connection pool pointer singleton connection
-	return &DbConn{
-		DbPool: db,
-	}
+	logger.Info().Str("source", "database").Msg("Database connected successfully")
+
+	return &DbConn{DbPool: db}
 }
 
-// ClosePool closes the database connection pool.
-func (db *DbConn) ClosePool() error {
-	if db.DbPool != nil {
-		return db.DbPool.Close()
-	}
-	return nil
-}
-
-// Run database migration files only if migration path is set
-func runMigration(db *sql.DB, path string) error {
+func runMigration(db *sql.DB, path string, logger zerolog.Logger) error {
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create postgres driver: %w", err)
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
@@ -67,13 +52,16 @@ func runMigration(db *sql.DB, path string) error {
 		driver,
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create migration instance: %w", err)
 	}
 
-	// Migrate up to the latest active version
+	logger.Info().Str("source", "migration").Msg("Running database migrations")
+
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		return err
+		return fmt.Errorf("migration failed: %w", err)
 	}
+
+	logger.Info().Str("source", "migration").Msg("Database migrations applied successfully")
 
 	return nil
 }
