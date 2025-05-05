@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"PetAi/internal/llmrequest"
-	"PetAi/internal/llmrequest/service"
+	"PetAi/internal/llm"
+	"PetAi/internal/llm/service"
 	"PetAi/pkg/apperror"
 	"PetAi/pkg/messages"
 	"PetAi/pkg/validate"
@@ -35,7 +35,7 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 			return apperror.BadRequest(appErr, err)
 		}
 
-		aiApiProvider, err := llmrequest.ParseAIApiProvider(body.AIProvider)
+		aiApiProvider, err := llm.ParseAIApiProvider(body.AIProvider)
 		if err != nil {
 			// if service response an error return via the middleware
 			log.Error(err)
@@ -43,12 +43,12 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		}
 
 		// No schema errores then map body to domain
-		p := &llmrequest.LLMRequest{
+		p := &llm.LLMRequest{
 			AIApiProvider: aiApiProvider,
-			Promt: llmrequest.Promt{
+			Promt: llm.Promt{
 				RequestMessage: body.Message,
 				SystemMessage:  "You are a helpful assistant that creates blog outlines.",
-				Model:          llmrequest.O4mini,
+				Model:          llm.O4mini,
 			},
 		}
 

@@ -1,7 +1,7 @@
 package injection
 
 import (
-	llmhandler "PetAi/internal/llmrequest/handler"
+	llmhandler "PetAi/internal/llm/handler"
 	producthandler "PetAi/internal/product/handler"
 	userhandler "PetAi/internal/user/handler"
 	"PetAi/pkg/config"

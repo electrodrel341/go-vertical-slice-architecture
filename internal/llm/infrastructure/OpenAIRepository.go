@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"PetAi/internal/llmrequest"
+	"PetAi/internal/llm"
 	"PetAi/pkg/apperror"
 	appConfig "PetAi/pkg/config"
 	"PetAi/pkg/database"
@@ -23,7 +23,7 @@ type OpenAIRepository struct {
 }
 
 // Create a LLM request instance repository
-func NewOpenAIRepository(dbcon *database.DbConn) (llmrequest.LLMRepository, error) {
+func NewOpenAIRepository(dbcon *database.DbConn) (llm.LLMRepository, error) {
 
 	apiKey := appConfig.Get().LLMConfig.OpenAIAPIKey
 
@@ -64,7 +64,7 @@ func NewOpenAIRepository(dbcon *database.DbConn) (llmrequest.LLMRepository, erro
 }
 
 // Send a new request in the LLM
-func (repo *OpenAIRepository) SendRequest(p *llmrequest.Promt) (string, error) {
+func (repo *OpenAIRepository) SendRequest(p *llm.Promt) (string, error) {
 	// Формируем сообщения для чата
 	messages := []openai.ChatCompletionMessage{
 		{

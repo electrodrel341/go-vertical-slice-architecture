@@ -1,4 +1,4 @@
-package llmrequest
+package llm
 
 type LLMRepository interface {
 	SendRequest(p *Promt) (string, error)

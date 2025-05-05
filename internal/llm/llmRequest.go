@@ -1,4 +1,4 @@
-package llmrequest
+package llm
 
 import (
 	"PetAi/pkg/apperror"
@@ -17,26 +17,28 @@ const (
 	UndefinedProvider
 )
 
-const (
-	O1 AIModel = iota
-	O3
-	O4
-	O4mini
-	Claude37sonnet
-	Googledefaultmodel
-	Yandexdefaultmodel
-	UndefinedModel
-)
+// Срез всех значений
+var AllProviders = []AIApiProvider{
+	OpenAi,
+	Yandex,
+	Anthropic,
+	GoogleCloud,
+}
 
-/*// String representation of the ProductCategory
 func (p AIApiProvider) String() string {
-	return [...]string{
-		"openai",
-		"yandex",
-		"anthropic-ai",
-		"google-cloud",
-	}[p]
-}*/
+	switch p {
+	case OpenAi:
+		return "OpenAi"
+	case Yandex:
+		return "Yandex"
+	case Anthropic:
+		return "Anthropic"
+	case GoogleCloud:
+		return "GoogleCloud"
+	default:
+		return "UndefinedProvider"
+	}
+}
 
 // Parse ProductCategory converts a string to ProductCategory
 func ParseAIApiProvider(s string) (AIApiProvider, error) {
@@ -57,6 +59,17 @@ func ParseAIApiProvider(s string) (AIApiProvider, error) {
 
 	}
 }
+
+const (
+	O1 AIModel = iota
+	O3
+	O4
+	O4mini
+	Claude37sonnet
+	Googledefaultmodel
+	Yandexdefaultmodel
+	UndefinedModel
+)
 
 func (p AIModel) String() string {
 	return [...]string{

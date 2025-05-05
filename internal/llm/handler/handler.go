@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"PetAi/internal/llmrequest/service"
+	"PetAi/internal/llm/service"
 	"github.com/gofiber/fiber/v2"
 )
 

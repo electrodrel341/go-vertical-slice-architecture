@@ -1,7 +1,7 @@
 package service
 
 import (
-	"PetAi/internal/llmrequest/infrastructure"
+	"PetAi/internal/llm/infrastructure"
 	"go.uber.org/dig"
 )
 

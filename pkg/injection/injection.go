@@ -1,7 +1,7 @@
 package injection
 
 import (
-	llmservice "PetAi/internal/llmrequest/service"
+	llmservice "PetAi/internal/llm/service"
 	productservice "PetAi/internal/product/service"
 	userservice "PetAi/internal/user/service"
 	"PetAi/pkg/config"
