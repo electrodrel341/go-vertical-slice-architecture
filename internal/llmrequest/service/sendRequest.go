@@ -11,17 +11,9 @@ type SendLLMRequestService struct {
 	logger zerolog.Logger
 }
 
-// Create a new llm request service use case instance
-/*func NewSendLLMRequestService(repository llmrequest.LLMRepository) *SendLLMRequestService {
-	// return the pointer to product service
-	return &SendLLMRequestService{
-		llmRepository: repository,
-	}
-}*/
-
 func NewSendLLMRequestService(
 	router llmrequest.LLMRepositoryRouter,
-	logger zerolog.Logger, // добавили логгер
+	logger zerolog.Logger,
 ) *SendLLMRequestService {
 	return &SendLLMRequestService{
 		router: router,
@@ -29,7 +21,6 @@ func NewSendLLMRequestService(
 	}
 }
 
-// Create a new product and store the product into the database
 func (service *SendLLMRequestService) SendRequest(p *llmrequest.LLMRequest) (string, error) {
 
 	repo, err := service.router.GetRepository(p.AIApiProvider)
