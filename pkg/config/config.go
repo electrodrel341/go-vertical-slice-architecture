@@ -2,7 +2,7 @@ package config
 
 import (
 	"PetAi/pkg/apperror"
-	"log"
+	"github.com/rs/zerolog/log"
 	"os"
 	"sync"
 )
@@ -79,7 +79,7 @@ func LoadConfig() error {
 
 func Get() *Config {
 	if cfg == nil {
-		log.Fatal("Конфигурация не инициализирована. Вызовите Load() в main")
+		log.Fatal().Msg("Конфигурация не инициализирована. Вызовите Load() в main")
 	}
 	return cfg
 }

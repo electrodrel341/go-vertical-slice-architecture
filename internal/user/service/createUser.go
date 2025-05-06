@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	"PetAi/internal/user"
 	"PetAi/pkg/apperror"
 )
@@ -26,7 +24,7 @@ func (service *CreateUserService) CreateUser(u *user.User) (int64, error) {
 	// check if user does not exist and no database error ocurred
 	if err != nil {
 		// database error
-		log.Println(err)
+		//log.Println(err)
 		err := apperror.InternalServerError(err)
 		return 0, err
 	}
@@ -41,7 +39,7 @@ func (service *CreateUserService) CreateUser(u *user.User) (int64, error) {
 	id, err := service.userRepository.Save(u)
 	if err != nil {
 		// database error
-		log.Println(err)
+		//log.Println(err)
 		err := apperror.InternalServerError(err)
 		return 0, err
 	}

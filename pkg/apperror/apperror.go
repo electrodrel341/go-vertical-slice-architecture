@@ -7,23 +7,41 @@ import (
 	"runtime/debug"
 )
 
+type AppErrorInterface interface {
+	error
+	Unwrap() error
+	LogFields() map[string]interface{}
+}
+
 type AppError struct {
 	Code                    int
 	Message                 string
 	InternalCode            int
 	InternalCodeDescription string
-	Id                      uuid.NullUUID
+	Id                      uuid.UUID
 	StackTrace              []byte
 	Cause                   error
 }
 
 func (r *AppError) Error() string {
 	return fmt.Sprintf("AppError[%s]: %s (HTTP %d, InternalCode %d - %s)",
-		r.Id.UUID.String(), r.Message, r.Code, r.InternalCode, r.InternalCodeDescription)
+		r.Id.String(), r.Message, r.Code, r.InternalCode, r.InternalCodeDescription)
 }
 
 func (e *AppError) Unwrap() error {
 	return e.Cause
+}
+
+func (e *AppError) LogFields() map[string]interface{} {
+	return map[string]interface{}{
+		"error_id":      e.Id.String(),
+		"message":       e.Message,
+		"http_code":     e.Code,
+		"internal_code": e.InternalCode,
+		"description":   e.InternalCodeDescription,
+		"stack":         string(e.StackTrace),
+		"cause":         e.Cause,
+	}
 }
 
 func NewAppError(HTTPCode int, errorData ErrorData, cause error) *AppError {
@@ -32,7 +50,7 @@ func NewAppError(HTTPCode int, errorData ErrorData, cause error) *AppError {
 		Message:                 errorData.Message,
 		InternalCode:            errorData.CodeValue,
 		InternalCodeDescription: errorData.CodeDescription,
-		Id:                      uuid.NullUUID{UUID: uuid.New()},
+		Id:                      uuid.New(),
 		StackTrace:              debug.Stack(),
 		Cause:                   cause,
 	}

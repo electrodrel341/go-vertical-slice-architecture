@@ -48,7 +48,7 @@ func ErrorResponseAppError(err *apperror.AppError) *fiber.Map {
 		"data":   nil,
 		"error":  err.Error(),
 		"error_data": ResponseErrorData{
-			Id:                      err.Id.UUID.String(),
+			Id:                      err.Id.String(),
 			Message:                 err.Message,
 			InternalCode:            err.InternalCode,
 			InternalCodeDescription: err.InternalCodeDescription,

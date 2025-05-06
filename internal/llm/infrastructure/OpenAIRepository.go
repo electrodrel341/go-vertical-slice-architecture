@@ -8,7 +8,6 @@ import (
 	"context"
 	"fmt"
 	openai "github.com/sashabaranov/go-openai"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -29,7 +28,6 @@ func NewOpenAIRepository(dbcon *database.DbConn) (llm.LLMRepository, error) {
 
 	if apiKey == "" {
 		err := apperror.ConfigNotFound(apperror.ErrorNotFoundOpenAiApiKey)
-		log.Println("Ошибка инициализации OpenAI:", err)
 		return nil, err
 	}
 

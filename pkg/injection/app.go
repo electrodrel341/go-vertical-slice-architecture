@@ -7,7 +7,7 @@ import (
 	"PetAi/pkg/config"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"log"
+	"github.com/rs/zerolog/log"
 )
 
 func InvokeApp() error {
@@ -30,7 +30,7 @@ func InvokeApp() error {
 
 		err := app.Listen(fmt.Sprintf(":%s", config.Get().APPConfig.Port))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal().Err(err).Msg("Ошибка запуска сервиса")
 		}
 	})
 }
