@@ -10,17 +10,16 @@ type AIModel int
 
 // Enumeration of product categories
 const (
-	OpenAi AIApiProvider = iota
+	UndefinedProvider AIApiProvider = iota
+	OpenAi
 	Yandex
 	Anthropic
 	GoogleCloud
-	UndefinedProvider
 )
 
 // Срез всех значений
 var AllProviders = []AIApiProvider{
 	OpenAi,
-	Yandex,
 	Anthropic,
 	GoogleCloud,
 }
@@ -61,14 +60,14 @@ func ParseAIApiProvider(s string) (AIApiProvider, error) {
 }
 
 const (
-	O1 AIModel = iota
+	UndefinedModel AIModel = iota
+	O1
 	O3
 	O4
 	O4mini
 	Claude37sonnet
 	Googledefaultmodel
 	Yandexdefaultmodel
-	UndefinedModel
 )
 
 func (p AIModel) String() string {
@@ -108,6 +107,33 @@ func ParseAIModel(s string) (AIModel, error) {
 	}
 }
 
+var ProviderToModels = map[AIApiProvider][]AIModel{
+	OpenAi:      {O1, O3, O4, O4mini},
+	Yandex:      {Yandexdefaultmodel},
+	Anthropic:   {Claude37sonnet},
+	GoogleCloud: {Googledefaultmodel},
+}
+
+var ProviderDefaultModel = map[AIApiProvider]AIModel{
+	OpenAi:      O4mini,
+	Yandex:      Yandexdefaultmodel,
+	Anthropic:   Claude37sonnet,
+	GoogleCloud: Googledefaultmodel,
+}
+
+func IsModelSupported(provider AIApiProvider, model AIModel) bool {
+	models, ok := ProviderToModels[provider]
+	if !ok {
+		return false
+	}
+	for _, m := range models {
+		if m == model {
+			return true
+		}
+	}
+	return false
+}
+
 type LLMRequest struct {
 	AIApiProvider AIApiProvider
 	Promt         Promt
@@ -125,13 +151,49 @@ type Promt struct {
 	ProviderSpecificParams map[string]interface{}
 }
 
-// Create a new product instance
-func New(provider AIApiProvider, message string, model AIModel) (*LLMRequest, error) {
+func NewPromt(
+	message string,
+	model *AIModel,
+	maxTokens *int,
+	temperature *float32,
+	topP *float32,
+	systemMessage string,
+	messagesHistory []string,
+	providerParams map[string]interface{},
+) Promt {
+	var selectedModel AIModel
+	if model != nil {
+		selectedModel = *model
+	}
+
+	return Promt{
+		RequestMessage:         message,
+		Model:                  selectedModel,
+		Max_tokens:             maxTokens,
+		Temperature:            temperature,
+		TopP:                   topP,
+		SystemMessage:          systemMessage,
+		MessagesHistory:        messagesHistory,
+		ProviderSpecificParams: providerParams,
+	}
+}
+
+func NewLLMRequest(provider AIApiProvider, promt Promt) *LLMRequest {
+	model := promt.Model
+
+	if model == UndefinedModel {
+		// Модель не задана — берём по умолчанию
+		defaultModel, ok := ProviderDefaultModel[provider]
+		if !ok {
+			return nil
+		}
+		promt.Model = defaultModel
+	} else if !IsModelSupported(provider, model) {
+		return nil
+	}
+
 	return &LLMRequest{
 		AIApiProvider: provider,
-		Promt: Promt{
-			RequestMessage: message,
-			Model:          model,
-		},
-	}, nil
+		Promt:         promt,
+	}
 }

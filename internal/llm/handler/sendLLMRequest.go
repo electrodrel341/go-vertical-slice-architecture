@@ -43,14 +43,11 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		}
 
 		// No schema errores then map body to domain
-		p := &llm.LLMRequest{
-			AIApiProvider: aiApiProvider,
-			Promt: llm.Promt{
-				RequestMessage: body.Message,
-				SystemMessage:  "You are a helpful assistant that creates blog outlines.",
-				Model:          llm.O4mini,
-			},
-		}
+		model := llm.O4mini
+		p := llm.NewLLMRequest(
+			aiApiProvider,
+			llm.NewPromt(body.Message, &model, nil, nil, nil, "You are a helpful assistant that creates blog outlines.", nil, nil),
+		)
 
 		// Execute the service
 		result, err := s.SendRequest(p)

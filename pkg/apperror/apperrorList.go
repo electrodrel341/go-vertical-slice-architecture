@@ -29,3 +29,15 @@ var ErrorWrongAIModel = ErrorData{
 	CodeDescription: "ERROR_WRONG_AI_MODEL",
 	Message:         "Некорректное значение AI модели",
 }
+
+var ErrorSetDefaultAIModelForProvider = ErrorData{
+	CodeValue:       1004,
+	CodeDescription: "ERROR_NOT_SET_DEFAULT_AI_MODEL_FOR_PROVIDER",
+	Message:         "Не задано значение AI модели по умолчанию для провайдера",
+}
+
+var ErrorWrongAIModelForProvider = ErrorData{
+	CodeValue:       1005,
+	CodeDescription: "ERROR_WRONG_AI_MODEL_FOR_PROVIDER",
+	Message:         "Значение AI модели не соответствует провайдеру",
+}
