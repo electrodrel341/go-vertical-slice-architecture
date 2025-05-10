@@ -7,6 +7,7 @@ import (
 	"PetAi/pkg/config"
 	"PetAi/pkg/database"
 	"PetAi/pkg/logger"
+	"PetAi/pkg/middleware"
 	"github.com/rs/zerolog"
 	"go.uber.org/dig"
 )
@@ -33,6 +34,13 @@ func ProvideComponents() {
 	}
 
 	err = container.Provide(provideFiberApp)
+	if err != nil {
+		panic(err)
+	}
+
+	err = container.Provide(func() *middleware.Middleware {
+		return middleware.InitJwtMiddleware(config.Get().JwtPath.PublicKeyPass)
+	})
 	if err != nil {
 		panic(err)
 	}
