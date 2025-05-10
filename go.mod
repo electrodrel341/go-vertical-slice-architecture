@@ -4,6 +4,7 @@ go 1.24.2
 
 require (
 	github.com/go-playground/validator/v10 v10.23.0
+	github.com/gofiber/contrib/jwt v1.1.1
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/golang-migrate/migrate/v4 v4.18.3
@@ -13,6 +14,7 @@ require (
 	github.com/sashabaranov/go-openai v1.39.1
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/dig v1.18.1
+	golang.org/x/crypto v0.36.0
 )
 
 require (
@@ -29,6 +31,7 @@ require (
 )
 
 require (
+	github.com/MicahParks/keyfunc/v2 v2.1.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -43,7 +46,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.5.2 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/sync v0.12.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect

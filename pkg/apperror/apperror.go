@@ -64,9 +64,13 @@ func BadRequest(errorData ErrorData, cause error) *AppError {
 	return NewAppError(http.StatusBadRequest, errorData, cause)
 }
 
-//func Unauthorized(Message string) *AppError {
-//	return NewAppError(http.StatusUnauthorized, Message)
-//}
+func Unauthorized(cause error) *AppError {
+	return NewAppError(http.StatusUnauthorized, ErrorUnauthorized, cause)
+}
+
+func LoginError(errorData ErrorData) *AppError {
+	return NewAppError(http.StatusUnauthorized, errorData, nil)
+}
 
 //func Forbidden(Message string) *AppError {
 //	return NewAppError(http.StatusForbidden, Message)
@@ -82,4 +86,8 @@ func EntityNotFound(errorData ErrorData) *AppError {
 
 func ConfigNotFound(errorData ErrorData) *AppError {
 	return NewAppError(http.StatusInternalServerError, errorData, nil)
+}
+
+func EntityDuplicate(errorData ErrorData) *AppError {
+	return NewAppError(http.StatusConflict, errorData, nil)
 }

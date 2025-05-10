@@ -41,3 +41,45 @@ var ErrorWrongAIModelForProvider = ErrorData{
 	CodeDescription: "ERROR_WRONG_AI_MODEL_FOR_PROVIDER",
 	Message:         "Значение AI модели не соответствует провайдеру",
 }
+
+var ErrorUnauthorized = ErrorData{
+	CodeValue:       4001,
+	CodeDescription: "ERROR_UNAUTHORIZED",
+	Message:         "Ошибка доступа",
+}
+
+var ErrorDuplicateUserLogin = ErrorData{
+	CodeValue:       1010,
+	CodeDescription: "ERROR_USER_DUPLICATE",
+	Message:         "Пользователь с такими логином уже зарегистрирован",
+}
+
+var ErrorDuplicateUserEmail = ErrorData{
+	CodeValue:       1011,
+	CodeDescription: "ERROR_USER_DUPLICATE",
+	Message:         "Пользователь с такими email уже зарегистрирован",
+}
+
+var ErrorLogin = ErrorData{
+	CodeValue:       1012,
+	CodeDescription: "ERROR_LOGIN",
+	Message:         "Ошибка авторизации",
+}
+
+var ErrorRequestValidation = ErrorData{
+	CodeValue:       4002,
+	CodeDescription: "ERROR_VALIDATION",
+	Message:         "Ошибка валидации запроса",
+}
+
+func BadRequestValidation(message string) ErrorData {
+	appError := ErrorRequestValidation
+	appError.Message = message
+	return appError
+}
+
+var ErrorRequestParse = ErrorData{
+	CodeValue:       4003,
+	CodeDescription: "ERROR_PARSE",
+	Message:         "Ошибка формата запроса",
+}

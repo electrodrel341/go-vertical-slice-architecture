@@ -7,7 +7,6 @@ import (
 	"PetAi/pkg/messages"
 	"PetAi/pkg/validate"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 )
 
 type LLMRequestSchema struct {
@@ -23,22 +22,17 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		// Validate the body
 		err := c.BodyParser(&body)
 		if err != nil {
-			// Map the error and response via the middleware
-			log.Error(err)
-			return err
+			return apperror.BadRequest(apperror.ErrorRequestParse, err)
 		}
 
 		// Validate schema
 		appErr, err := validate.Validate(body)
 		if err != nil {
-			log.Error(appErr)
 			return apperror.BadRequest(appErr, err)
 		}
 
 		aiApiProvider, err := llm.ParseAIApiProvider(body.AIProvider)
 		if err != nil {
-			// if service response an error return via the middleware
-			log.Error(err)
 			return err
 		}
 
@@ -52,8 +46,6 @@ func SendRequest(s *service.SendLLMRequestService) fiber.Handler {
 		// Execute the service
 		result, err := s.SendRequest(p)
 		if err != nil {
-			// if service response an error return via the middleware
-			log.Error(err)
 			return err
 		}
 
