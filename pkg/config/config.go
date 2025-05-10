@@ -12,6 +12,7 @@ type Config struct {
 	DBConfig    DBConfig
 	ProxyConfig ProxyConfig
 	LLMConfig   LLMConfig
+	JwtPath     JWTPATH
 	// добавьте другие необходимые поля
 }
 
@@ -37,6 +38,11 @@ type AppConfig struct {
 
 type LLMConfig struct {
 	OpenAIAPIKey string
+}
+
+type JWTPATH struct {
+	PrivateKeyPass string
+	PublicKeyPass  string
 }
 
 var (
@@ -71,6 +77,10 @@ func LoadConfig() error {
 				Name:     os.Getenv("PROJECT_NAME"),
 				Port:     os.Getenv("API_PORT"),
 				LogLevel: os.Getenv("LOG_LEVEL"),
+			},
+			JwtPath: JWTPATH{
+				PrivateKeyPass: os.Getenv("JWT_PRIVATE_KEY_PATH"),
+				PublicKeyPass:  os.Getenv("JWT_PUBLIC_KEY_PATH"),
 			},
 		}
 	})
